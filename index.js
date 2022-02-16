@@ -3,12 +3,14 @@ const path = require('path');
 const ejs = require('ejs');
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/my_database');
+mongoose.connect('mongodb://localhost/my_database', {useNewUrlParser: true});
 
 const app = new express();
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
+app.use(express.json());
+app.use(express.urlencoded());
 
 app.listen(4000, () => {
     console.log('App listening on port 4000');
@@ -29,4 +31,15 @@ app.get('/contact', (req, res) => {
 
 app.get('/post', (req, res) => {
     res.render('contact');
+})
+
+app.get('/posts/new', (req, res) => {
+    res.render('create');
+})
+
+
+app.post('/posts/store', (req, res) => {
+    console.log(req.body.title);
+    console.log(req.body.body);
+    res.redirect('/');
 })
